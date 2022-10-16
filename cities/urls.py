@@ -1,8 +1,8 @@
 from django.urls import path
 
-from cities.views import home
+from cities.views import home, CityDetailView
 
 urlpatterns = [
     path('', home, name='home'),
-    path('<int:pk>/', home, name='home')
+    path('detail/<int:pk>/', CityDetailView.as_view(), name='detail')
 ]
