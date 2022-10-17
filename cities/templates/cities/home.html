@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
+{% block title %} Список городов {% endblock %}
 
-{% block title %}
-Список городов
-{% endblock %}
 {% block content %}
      <h1> Список городов </h1>
 <div class="row">
@@ -16,8 +14,7 @@
 </div>
 
 <form action="" method="post"> {% csrf_token %}
-  <label for="fname">Город:</label><br>
-  <input type="text" id="fname" name="name" value="New-York"><br>
+    {{ form.as_p }}
   <input type="submit" value="Submit">
 </form>
 

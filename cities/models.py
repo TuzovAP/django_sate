@@ -6,6 +6,7 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+    # определяю отображение модели в админке
     class Meta():
         verbose_name = 'Город'
         verbose_name_plural = 'Города'
