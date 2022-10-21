@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, UpdateView
 
 from cities.forms import HtmlForm, CityForm
 from cities.models import City
@@ -34,3 +34,10 @@ class CityCreateView(CreateView):
     form_class = CityForm  # модель формы через django
     template_name = 'cities/create.html'
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно испольховать ленивый реверс
+
+
+class CityUpdateView(UpdateView):
+    model = City  # таблица городов в БД
+    form_class = CityForm  # модель формы через django
+    template_name = 'cities/update.html'
+    success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно использовать ленивый реверс
