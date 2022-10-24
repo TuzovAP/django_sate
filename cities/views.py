@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 
 from cities.forms import HtmlForm, CityForm
 from cities.models import City
@@ -41,3 +41,11 @@ class CityUpdateView(UpdateView):
     form_class = CityForm  # модель формы через django
     template_name = 'cities/update.html'
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно использовать ленивый реверс
+
+class CityDeleteView(DeleteView):
+    model = City  # таблица городов в БД
+    template_name = 'cities/delete.html'  # шаблон для отрисовки страницы с подтверждением
+    success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно использовать ленивый реверс
+    #  функуия для удаления без подтверждения. Не работает, видимо из-за новой версии джанго
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
