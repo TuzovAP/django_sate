@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -33,18 +35,20 @@ class CityDetailView(DetailView):
     template_name = 'cities/detail.html'
 
 
-class CityCreateView(CreateView):
+class CityCreateView(SuccessMessageMixin, CreateView):
     model = City  # таблица городов в БД
     form_class = CityForm  # модель формы через django
     template_name = 'cities/create.html'
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно испольховать ленивый реверс
+    success_message = "Город успешно создан"
 
 
-class CityUpdateView(UpdateView):
+class CityUpdateView(SuccessMessageMixin, UpdateView):
     model = City  # таблица городов в БД
     form_class = CityForm  # модель формы через django
     template_name = 'cities/update.html'
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно использовать ленивый реверс
+    success_message = "Город успешно отредактирован"
 
 class CityDeleteView(DeleteView):
     model = City  # таблица городов в БД
@@ -52,6 +56,7 @@ class CityDeleteView(DeleteView):
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно использовать ленивый реверс
     #  функуия для удаления без подтверждения. Не работает, видимо из-за новой версии джанго
     def get(self, request, *args, **kwargs):
+        messages.success(request, 'Город успешно удален')
         return self.post(request, *args, **kwargs)
 
 
