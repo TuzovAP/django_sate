@@ -29,31 +29,31 @@ class TrainListView(ListView):
 class TrainDetailView(DetailView):
     queryset = Train.objects.all()
     template_name = 'trains/detail.html'
-#
-#
-# class TrainCreateView(SuccessMessageMixin, CreateView):
-#     model = Train  # таблица городов в БД
-#     form_class = TrainForm  # модель формы через django
-#     template_name = 'trains/create.html'
-#     success_url = reverse_lazy('trains:home')  # в случае успеха переходим на trains:home, но нужно испольховать ленивый реверс
-#     success_message = "Город успешно создан"
-#
-#
-# class TrainUpdateView(SuccessMessageMixin, UpdateView):
-#     model = Train  # таблица городов в БД
-#     form_class = TrainForm  # модель формы через django
-#     template_name = 'trains/update.html'
-#     success_url = reverse_lazy('trains:home')  # в случае успеха переходим на trains:home, но нужно использовать ленивый реверс
-#     success_message = "Город успешно отредактирован"
-#
-# class TrainDeleteView(DeleteView):
-#     model = Train  # таблица городов в БД
-#     template_name = 'trains/delete.html'  # шаблон для отрисовки страницы с подтверждением
-#     success_url = reverse_lazy('trains:home')  # в случае успеха переходим на trains:home, но нужно использовать ленивый реверс
-#     #  функуия для удаления без подтверждения. Не работает, видимо из-за новой версии джанго
-#     def get(self, request, *args, **kwargs):
-#         messages.success(request, 'Город успешно удален')
-#         return self.post(request, *args, **kwargs)
+
+
+class TrainCreateView(SuccessMessageMixin, CreateView):
+    model = Train  # таблица городов в БД
+    form_class = TrainForm  # модель формы через django
+    template_name = 'trains/create.html'
+    success_url = reverse_lazy('trains:home')  # в случае успеха переходим на trains:home, но нужно испольховать ленивый реверс
+    success_message = "Поезд успешно создан"
+
+
+class TrainUpdateView(SuccessMessageMixin, UpdateView):
+    model = Train  # таблица городов в БД
+    form_class = TrainForm  # модель формы через django
+    template_name = 'trains/update.html'
+    success_url = reverse_lazy('trains:home')  # в случае успеха переходим на trains:home, но нужно использовать ленивый реверс
+    success_message = "Поезд успешно отредактирован"
+
+class TrainDeleteView(DeleteView):
+    model = Train  # таблица городов в БД
+    template_name = 'trains/delete.html'  # шаблон для отрисовки страницы с подтверждением
+    success_url = reverse_lazy('trains:home')  # в случае успеха переходим на trains:home, но нужно использовать ленивый реверс
+    #  функуия для удаления без подтверждения. Не работает, видимо из-за новой версии джанго
+    def get(self, request, *args, **kwargs):
+        messages.success(request, 'Поезд успешно удален')
+        return self.post(request, *args, **kwargs)
 
 
 
