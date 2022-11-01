@@ -3,8 +3,9 @@
 
 {% block content %}
      <h1> Поиск маршрута </h1>
-
-{% include 'form.html' with button='Search' %}
+     <!--Создаю переменную "action" для поиска маршрута-->
+     {% url 'find_routes' as action %}
+     {% include 'form.html' with button='Search' action=action %}
 
 
 {% endblock %}
