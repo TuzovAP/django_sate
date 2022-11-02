@@ -36,9 +36,19 @@ def get_routes(request, form) -> dict:
     data = form.cleaned_data  # привожу данные из формы в читабельный вид  form.cleaned_data
     from_city = data['from_city']
     to_city = data['to_city']
+    cities = data['cities']  # список городов, через которые хотим проехать
     travelling_time = data['travelling_time']
-    all_ways = dfs_paths(graph, start=from_city.id, goal=to_city.id)
-    if not len(list(all_ways)):  # функция возвращает генератор yeld, поэтому использкем list
+    all_ways = list(dfs_paths(graph, start=from_city.id, goal=to_city.id))  # список всех возможных маршрутов из А в Б
+    if not len(all_ways):  # функция возвращает генератор yeld, поэтому используем list
         raise ValueError('Маршрут не найден')
+    if cities:
+        _cities = [city.id for city in cities]
+        right_ways = []
+        for route in all_ways:
+            if all(city in route for city in _cities):  # если все нужные города есть в маршруте, добавляю его
+                right_ways.append(route)
+            if not right_ways:
+                raise ValueError('Маршрут через выбранные города не возможен')
+
     return context
 
