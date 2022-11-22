@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
@@ -42,15 +43,17 @@ class CityCreateView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно испольховать ленивый реверс
     success_message = "Город успешно создан"
 
-
-class CityUpdateView(SuccessMessageMixin, UpdateView):
+# LoginRequiredMixin - добавляется в первую очередь, исключение если есть SuccessMessageMixin
+class CityUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = City  # таблица городов в БД
     form_class = CityForm  # модель формы через django
     template_name = 'cities/update.html'
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно использовать ленивый реверс
     success_message = "Город успешно отредактирован"
 
-class CityDeleteView(DeleteView):
+
+# LoginRequiredMixin - авторизация, функция для классов
+class CityDeleteView(LoginRequiredMixin, DeleteView):
     model = City  # таблица городов в БД
     template_name = 'cities/delete.html'  # шаблон для отрисовки страницы с подтверждением
     success_url = reverse_lazy('cities:home')  # в случае успеха переходим на cities:home, но нужно использовать ленивый реверс

@@ -31,7 +31,9 @@ def get_graph(qs):
 # функция для обработки формы поиска маршрута
 def get_routes(request, form) -> dict:
     context = {'form': form}
-    qs = Train.objects.all()  # список всех поездов из таблицы/модели Train
+    # select_related() Для уменьшения отдельных обращений к БД, получаю инфу сразу по всем связанным таблицам
+    qs = Train.objects.all().select_related('from_city', 'to_city')
+    # qs = Train.objects.all()  # список всех поездов из таблицы/модели Train
     graph = get_graph(qs)
     data = form.cleaned_data  # привожу данные из формы в читабельный вид  form.cleaned_data
     from_city = data['from_city']
@@ -49,6 +51,39 @@ def get_routes(request, form) -> dict:
                 right_ways.append(route)
             if not right_ways:
                 raise ValueError('Маршрут через выбранные города не возможен')
-
+    else:
+        # если города, через которые необходимо проехать не заданы - приравниваем их ко всем городам
+        right_ways = all_ways
+    routes = []
+    all_trains = {}
+    for q in qs:
+        all_trains.setdefault((q.from_city, q.to_city), [])
+        all_trains[(q.from_city, q.to_city)].append(q)
+    for route in right_ways:
+        tmp = {}
+        tmp['trains'] = []
+        total_time = 0
+        for i in range(len(route)-1):
+            qs = all_trains[(route[i], route[i+1])]
+            q = qs[0]
+            total_time += q.travel_time
+            tmp['trains'].append(q)
+        tmp['total_time'] = total_time
+        if total_time <= travelling_time:
+            routes.append(tmp)
+    if not routes:
+        raise ValueError('Время в пути больше заданного')
+    sorted_routes = []
+    if len(routes) == 1:
+        sorted_routes = routes
+    else:
+        times = list(set(r['total_time'] for r in routes))
+        times = sorted(times)
+        for time in times:
+            for route in routes:
+                if time == route['total_time']:
+                    sorted_routes.append(route)
+    context['routes'] = sorted_routes
+    context['cities'] = {'from_city': from_city, 'to_city': to_city}
     return context
 

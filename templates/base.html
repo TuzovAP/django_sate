@@ -3,6 +3,8 @@
 {% url 'trains:home' as trains_home_url %}
 {% url 'trains:create' as trains_create_url %}
 {% url 'home' as home_url %}
+{% url 'list' as route_list %}
+{% url 'detail' as route_detail %}
 
 <!doctype html>
 <html lang="en">
@@ -16,7 +18,7 @@
     <title>{% block title %} {% endblock %}</title>
   </head>
   <body>
-  <ul class="nav nav-pills">
+  <ul class="nav nav-pills ml-auto">
       <li class="nav-item">
         <a class="nav-link
         {% if request.path == home_url %} active {% endif %} " aria-current="page" href="{% url 'home'%}">FindRoute</a>
@@ -27,6 +29,12 @@
       <li class="nav-item">
         <a class="nav-link {% if request.path == trains_home_url %} active {% endif %}" href="{% url 'trains:home'%}">Поезда</a>
       </li>
+      <li class="nav-item
+        {% if request.path == route_list %} active {% endif %}
+        ">
+        <a class="nav-link" href="{% url 'list'%}">Маршруты</a>
+      </li>
+      {% if user.is_authenticated %}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle
         {% if request.path == cities_create_url or request.path == trains_create_url %} active {% endif %}"
@@ -42,6 +50,23 @@
           </li>
         </ul>
       </li>
+      {% else %}
+        <li class="nav-item">
+            <a class="nav-link disabled" href=" ">Добавить</a>
+        </li>
+      {% endif %}
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'accounts:logout'%}">Выйти</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:login'%}">Войти</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:registration'%}">Регистрация</a>
+        </li>
+      {% endif %}
       <li class="nav-item">
         <a class="nav-link disabled">Disabled</a>
       </li>
